@@ -180,6 +180,11 @@ def main():
     Path("PR_TITLE.txt").write_text(spec.get("pr_title", "AI update"), encoding="utf-8")
     Path("PR_BODY.md").write_text(spec.get("pr_body", ""), encoding="utf-8")
 
+    # Always ensure at least one changed file so the PR step has something to commit
+    run_id = os.environ.get("GITHUB_RUN_ID", "")
+    marker = Path("tools") / (f".ai-run-{run_id}.txt" if run_id else ".ai-run-marker.txt")
+    marker.write_text("ok\n", encoding="utf-8")
+
     print("AI Coder wrote files; a PR will be opened in the next step.")
 
 

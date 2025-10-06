@@ -68,9 +68,8 @@ def ensure_safe_path(p: str) -> Path:
 
     path = Path(p)
 
-    # TEMP GUARD: block writes inside .github/workflows/ to avoid permission rejections
     if str(path).startswith(".github/workflows/"):
-        raise ValueError(f"Path not allowed (workflows blocked for now): {p}")
+    raise ValueError("Path not allowed (workflows blocked for now): " + p)
 
     # No path traversal
     if ".." in path.parts:

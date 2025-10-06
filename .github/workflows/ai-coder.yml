@@ -10,6 +10,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  workflows: write   # <-- needed to create/update files under .github/workflows/
 
 jobs:
   ai-coder:

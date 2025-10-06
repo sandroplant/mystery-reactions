@@ -1,5 +1,4 @@
 name: AI Coder (manual)
-
 on:
   workflow_dispatch:
     inputs:

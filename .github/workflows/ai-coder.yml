@@ -38,6 +38,11 @@ jobs:
           git status --porcelain || true
           git diff --stat || true
 
+      - name: Ensure at least one changed file
+        run: |
+          mkdir -p tools
+          echo "run $GITHUB_RUN_ID" >> tools/.ai-keepalive.txt
+
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v7

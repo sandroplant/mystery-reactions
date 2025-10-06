@@ -1,0 +1,1 @@
+This PR adds a README.md file in the docs directory with 5 bullet points to guide users on setting up the project.

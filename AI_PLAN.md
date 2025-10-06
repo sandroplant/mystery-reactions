@@ -1,0 +1,1 @@
+Create a README.md file in the docs directory with 5 setup steps to guide users on setting up the project.

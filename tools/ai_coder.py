@@ -110,9 +110,20 @@ def extract_text_from_responses(resp) -> str:
 
 def parse_single_json_object(s: str) -> dict:
     """
-    Find the last JSON object in a string (common pattern when LLMs add preface).
+    Accept JSON with or without Markdown code fences.
+    Find the last JSON object and parse it.
     """
-    m = re.search(r"\{.*\}\s*$", s, flags=re.S)
+    # Strip Markdown code fences like ```json ... ``` or ``` ... ```
+    s_no_fences = re.sub(r"^```(?:json)?\s*|\s*```$", "", s.strip(), flags=re.I | re.M)
+
+    # Try to parse the whole thing first
+    try:
+        return json.loads(s_no_fences)
+    except Exception:
+        pass
+
+    # Fallback: find the last {...} block
+    m = re.search(r"\{.*\}\s*$", s_no_fences, flags=re.S)
     if not m:
         raise SystemExit("AI did not return JSON. Raw output:\n" + s)
     try:

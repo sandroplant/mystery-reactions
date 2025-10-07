@@ -68,8 +68,9 @@ def ensure_safe_path(p: str) -> Path:
 
     path = Path(p)
 
+    # Disallow creating or modifying workflow files directly
     if str(path).startswith(".github/workflows/"):
-    raise ValueError("Path not allowed (workflows blocked for now): " + p)
+        raise ValueError("Path not allowed (workflows blocked for now): " + p)
 
     # No path traversal
     if ".." in path.parts:

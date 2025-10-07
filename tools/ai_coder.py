@@ -11,7 +11,7 @@ except Exception as e:
 # ---- Config ---------------------------------------------------------------
 
 # Prefer a stable, widely-available model unless you override via repo secret OPENAI_MODEL
-MODEL = os.environ.get("OPENAI_MODEL", "gpt-4o").strip()
+MODEL = os.environ.get("OPENAI_MODEL", "gpt-4-turbo").strip()
 
 TASK = os.environ.get("TASK", "").strip()
 if not TASK:
@@ -118,7 +118,7 @@ def parse_single_json_object(s: str) -> dict:
     Find the last JSON object and parse it.
     """
     # Strip Markdown code fences like ```json ... ``` or ``` ... ```
-    s_no_fences = re.sub(r"^```(?:json)?\s*|\s*```$", "", s.strip(), flags=re.I | re.M)
+    s_no_fences = re.sub(r"^```(?:json)?\\s*|\\s*```$", "", s.strip(), flags=re.I | re.M)
 
     # Try to parse the whole thing first
     try:
@@ -127,13 +127,13 @@ def parse_single_json_object(s: str) -> dict:
         pass
 
     # Fallback: find the last {...} block
-    m = re.search(r"\{.*\}\s*$", s_no_fences, flags=re.S)
+    m = re.search(r"\\{.*\\}\\s*$", s_no_fences, flags=re.S)
     if not m:
-        raise SystemExit("AI did not return JSON. Raw output:\n" + s)
+        raise SystemExit("AI did not return JSON. Raw output:\\n" + s)
     try:
         return json.loads(m.group(0))
     except json.JSONDecodeError as e:
-        raise SystemExit(f"Failed to parse JSON from AI output: {e}\nRaw:\n{m.group(0)}") from e
+        raise SystemExit(f"Failed to parse JSON from AI output: {e}\\nRaw:\\n{m.group(0)}") from e
 
 
 # ---- Main ----------------------------------------------------------------
@@ -145,23 +145,35 @@ def main():
 
     client = OpenAI(api_key=api_key)
 
-    resp = client.responses.create(
-        model=MODEL,
-        input=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {
-                "role": "user",
-                "content": (
-                    f"TASK:\n{TASK}\n\n"
-                    "Existing repo may be empty. Create missing folders as needed. "
-                    "Return ONLY a single JSON object per the schema."
-                ),
-            },
-        ],
-        temperature=0.2,
+    user_prompt = (
+        f"TASK:\\n{TASK}\\n\\n"
+        "Existing repo may be empty. Create missing folders as needed. "
+        "Return ONLY a single JSON object per the schema."
     )
 
-    text = extract_text_from_responses(resp)
+    # Try the Responses API first; if it fails, fall back to Chat Completions
+    try:
+        resp = client.responses.create(
+            model=MODEL,
+            input=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": user_prompt},
+            ],
+            temperature=0.2,
+        )
+        text = extract_text_from_responses(resp)
+    except Exception:
+        # Fallback to Chat Completions
+        chat = client.chat.completions.create(
+            model=MODEL,
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": user_prompt},
+            ],
+            temperature=0.2,
+        )
+        text = chat.choices[0].message.content
+
     spec = parse_single_json_object(text)
 
     files = spec.get("files", [])
@@ -176,7 +188,7 @@ def main():
             raise SystemExit("AI JSON has a file without 'path'.")
         path = ensure_safe_path(path_str)
         path.parent.mkdir(parents=True, exist_ok=True)
-        with open(path, "w", encoding="utf-8", newline="\n") as fh:
+        with open(path, "w", encoding="utf-8", newline="\\n") as fh:
             fh.write(content)
 
     # Optional helper docs for PR context
@@ -187,7 +199,7 @@ def main():
     # Always ensure at least one changed file so the PR step has something to commit
     run_id = os.environ.get("GITHUB_RUN_ID", "")
     marker = Path("tools") / (f".ai-run-{run_id}.txt" if run_id else ".ai-run-marker.txt")
-    marker.write_text("ok\n", encoding="utf-8")
+    marker.write_text("ok\\n", encoding="utf-8")
 
     print("AI Coder wrote files; a PR will be opened in the next step.")
 

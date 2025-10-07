@@ -8,3 +8,7 @@ Follow these steps to set up the project:
 4. **Set up environment variables**: Copy `.env.example` to `.env` and configure the required variables.
 5. **Start the development server**: Use `npm start` to run the project locally.
 
+
+
+
+s

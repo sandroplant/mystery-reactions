@@ -10,7 +10,6 @@ on:
 permissions:
   contents: write
   pull-requests: write
-  workflows: write
 
 jobs:
   ai-coder:
@@ -37,7 +36,7 @@ jobs:
           GITHUB_RUN_ID: ${{ github.run_id }}
         run: python tools/ai_coder.py
 
-      # --- Validation for any generated *-ci.yml workflows -----------------
+      # --- Validate any generated *-ci.yml workflows (optional, safe) ------
       - name: Validate any changed workflow files
         run: |
           set -e

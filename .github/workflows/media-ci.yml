@@ -1,0 +1,8 @@
+name: Media CI
+on:
+  pull_request:
+jobs:
+  ok:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "media ok"

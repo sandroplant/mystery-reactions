@@ -10,6 +10,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  workflows: write
 
 jobs:
   ai-coder:
@@ -35,6 +36,27 @@ jobs:
           TASK: ${{ inputs.task }}
           GITHUB_RUN_ID: ${{ github.run_id }}
         run: python tools/ai_coder.py
+
+      # --- Validation for any generated *-ci.yml workflows -----------------
+      - name: Validate any changed workflow files
+        run: |
+          set -e
+          CHANGED=$(git ls-files -m -o --exclude-standard | grep -E '^\.github/workflows/.*-ci\.yml$' || true)
+          if [ -z "$CHANGED" ]; then
+            echo "No *-ci.yml workflow changes detected."
+            exit 0
+          fi
+
+          echo "Changed workflow files:"
+          echo "$CHANGED"
+
+          # Install actionlint
+          curl -sSL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash | bash -s -- -b .
+          for f in $CHANGED; do
+            echo "Validating $f"
+            ./actionlint -color -shellcheck= -pyflakes= "$f"
+          done
+      # ---------------------------------------------------------------------
 
       - name: Ensure at least one changed file (always)
         run: |
@@ -72,7 +94,8 @@ jobs:
             const { owner, repo } = context.repo;
             const branch = `ai/${process.env.GITHUB_RUN_ID}`;
             const res = await github.rest.pulls.create({
-              owner, repo,
+              owner,
+              repo,
               title: `AI: ${{ inputs.task }}`,
               head: branch,
               base: 'main',

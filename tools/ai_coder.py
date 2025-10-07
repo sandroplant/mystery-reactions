@@ -68,9 +68,13 @@ def ensure_safe_path(p: str) -> Path:
 
     path = Path(p)
 
-    # Disallow creating or modifying workflow files directly
+    # TEMP GUARD: allow only CI workflow files named "*-ci.yml"
     if str(path).startswith(".github/workflows/"):
-        raise ValueError("Path not allowed (workflows blocked for now): " + p)
+    fname = path.name
+    if not fname.endswith("-ci.yml"):
+        raise ValueError(
+            f"Path not allowed (only *-ci.yml permitted in workflows): {p}"
+        )
 
     # No path traversal
     if ".." in path.parts:

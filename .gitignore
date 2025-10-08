@@ -1,0 +1,15 @@
+# Node
+node_modules/
+*.log
+web/.next/
+web/node_modules/
+
+# Python
+*.pyc
+__pycache__/
+apps/media/.venv/
+
+# OS/editor
+.DS_Store
+.idea/
+.vscode/

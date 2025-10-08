@@ -1,1 +1,1 @@
-This PR sets up a minimal NestJS project in /apps/api. It includes a health check endpoint at GET /healthz and Jest configuration with unit and e2e tests.
+This PR sets up a minimal NestJS project in the /apps/api directory. It includes a health check endpoint at GET /healthz that returns {"ok": true}. Jest is configured for testing, with tests for both compilation and the /healthz endpoint.

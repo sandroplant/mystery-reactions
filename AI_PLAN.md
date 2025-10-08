@@ -1,1 +1,1 @@
-Re-generate /apps/api with a minimal NestJS project. Add a health check endpoint and Jest configuration with tests.
+Create a minimal NestJS project in /apps/api with a health check endpoint. Add Jest configuration and tests for compilation and the /healthz endpoint.

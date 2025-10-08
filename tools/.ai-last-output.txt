@@ -1,14 +1,14 @@
 ```json
 {
-  "plan": "Re-generate /apps/api with a minimal NestJS project. Add a health check endpoint and Jest configuration with tests.",
+  "plan": "Create a minimal NestJS project in /apps/api with a health check endpoint. Add Jest configuration and tests for compilation and the /healthz endpoint.",
   "files": [
     {
       "path": "apps/api/package.json",
-      "content": "{\n  \"name\": \"api\",\n  \"version\": \"0.0.1\",\n  \"description\": \"API service\",\n  \"main\": \"dist/main.js\",\n  \"scripts\": {\n    \"start\": \"nest start\",\n    \"build\": \"nest build\",\n    \"test\": \"jest\"\n  },\n  \"dependencies\": {\n    \"@nestjs/common\": \"^9.0.0\",\n    \"@nestjs/core\": \"^9.0.0\",\n    \"@nestjs/platform-express\": \"^9.0.0\",\n    \"reflect-metadata\": \"^0.1.13\",\n    \"rxjs\": \"^7.0.0\"\n  },\n  \"devDependencies\": {\n    \"@nestjs/cli\": \"^9.0.0\",\n    \"@nestjs/schematics\": \"^9.0.0\",\n    \"@nestjs/testing\": \"^9.0.0\",\n    \"@types/jest\": \"^29.0.0\",\n    \"@types/node\": \"^18.0.0\",\n    \"jest\": \"^29.0.0\",\n    \"ts-jest\": \"^29.0.0\",\n    \"ts-loader\": \"^9.0.0\",\n    \"ts-node\": \"^10.0.0\",\n    \"typescript\": \"^4.0.0\"\n  }\n}\n"
+      "content": "{\n  \"name\": \"api\",\n  \"version\": \"1.0.0\",\n  \"main\": \"dist/main.js\",\n  \"scripts\": {\n    \"start\": \"nest start\",\n    \"build\": \"nest build\",\n    \"test\": \"jest\"\n  },\n  \"dependencies\": {\n    \"@nestjs/common\": \"^9.0.0\",\n    \"@nestjs/core\": \"^9.0.0\",\n    \"reflect-metadata\": \"^0.1.13\",\n    \"rxjs\": \"^7.0.0\"\n  },\n  \"devDependencies\": {\n    \"@nestjs/cli\": \"^9.0.0\",\n    \"@nestjs/testing\": \"^9.0.0\",\n    \"@types/jest\": \"^29.0.0\",\n    \"jest\": \"^29.0.0\",\n    \"ts-jest\": \"^29.0.0\",\n    \"typescript\": \"^4.0.0\"\n  }\n}"
     },
     {
       "path": "apps/api/tsconfig.json",
-      "content": "{\n  \"compilerOptions\": {\n    \"module\": \"commonjs\",\n    \"target\": \"es2017\",\n    \"lib\": [\"es2017\"],\n    \"declaration\": true,\n    \"sourceMap\": true,\n    \"outDir\": \"./dist\",\n    \"strict\": true,\n    \"moduleResolution\": \"node\",\n    \"esModuleInterop\": true,\n    \"experimentalDecorators\": true,\n    \"emitDecoratorMetadata\": true\n  },\n  \"include\": [\"src/**/*\"],\n  \"exclude\": [\"node_modules\", \"dist\"]\n}\n"
+      "content": "{\n  \"compilerOptions\": {\n    \"module\": \"commonjs\",\n    \"target\": \"es6\",\n    \"strict\": true,\n    \"esModuleInterop\": true,\n    \"skipLibCheck\": true,\n    \"outDir\": \"dist\"\n  },\n  \"include\": [\"src/**/*\"],\n  \"exclude\": [\"node_modules\"]\n}"
     },
     {
       "path": "apps/api/src/main.ts",
@@ -32,11 +32,11 @@
     },
     {
       "path": "apps/api/src/main.spec.ts",
-      "content": "import { Test, TestingModule } from '@nestjs/testing';\nimport { INestApplication } from '@nestjs/common';\nimport * as request from 'supertest';\nimport { AppModule } from './app.module';\n\ndescribe('AppController (e2e)', () => {\n  let app: INestApplication;\n\n  beforeAll(async () => {\n    const moduleFixture: TestingModule = await Test.createTestingModule({\n      imports: [AppModule],\n    }).compile();\n\n    app = moduleFixture.createNestApplication();\n    await app.init();\n  });\n\n  it('/GET healthz', () => {\n    return request(app.getHttpServer())\n      .get('/healthz')\n      .expect(200)\n      .expect({ ok: true });\n  });\n});\n"
+      "content": "import { Test, TestingModule } from '@nestjs/testing';\nimport { INestApplication } from '@nestjs/common';\nimport * as request from 'supertest';\nimport { AppModule } from './app.module';\n\ndescribe('AppController (e2e)', () => {\n  let app: INestApplication;\n\n  beforeEach(async () => {\n    const moduleFixture: TestingModule = await Test.createTestingModule({\n      imports: [AppModule],\n    }).compile();\n\n    app = moduleFixture.createNestApplication();\n    await app.init();\n  });\n\n  it('/GET healthz', () => {\n    return request(app.getHttpServer())\n      .get('/healthz')\n      .expect(200)\n      .expect({ ok: true });\n  });\n});\n"
     }
   ],
-  "commit_message": "Initialize NestJS project with health check endpoint and tests",
-  "pr_title": "Initialize NestJS API with health check",
-  "pr_body": "This PR sets up a minimal NestJS project in /apps/api. It includes a health check endpoint at GET /healthz and Jest configuration with unit and e2e tests."
+  "commit_message": "Initialize NestJS project with health check endpoint",
+  "pr_title": "Initialize NestJS project in /apps/api",
+  "pr_body": "This PR sets up a minimal NestJS project in the /apps/api directory. It includes a health check endpoint at GET /healthz that returns {\"ok\": true}. Jest is configured for testing, with tests for both compilation and the /healthz endpoint."
 }
 ```

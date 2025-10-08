@@ -1,1 +1,1 @@
-This PR introduces a minimal FastAPI application in the /apps/media directory with a single endpoint, GET /presign, returning a JSON response. Additionally, it adds a Dockerfile.ffmpeg to set up a worker with ffmpeg installed. A pytest smoke test is included to verify the FastAPI endpoint.
+This PR adds npm scripts to the /web/package.json for development, building, and starting the application. It also improves the /web/pages/index.js by adding a hero section and a waitlist form with basic styling.

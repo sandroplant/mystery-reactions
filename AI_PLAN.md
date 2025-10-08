@@ -1,1 +1,1 @@
-Create a minimal FastAPI app in /apps/media with a single endpoint GET /presign. Add a Dockerfile.ffmpeg for a worker with ffmpeg installed. Include a pytest smoke test for the FastAPI app.
+Add npm scripts to /web/package.json for dev, build, and start. Improve /web/pages/index.js to display a hero section and a waitlist form with basic styling.

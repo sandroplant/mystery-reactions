@@ -1,1 +1,1 @@
-Create a README.md file in the docs directory with 5 setup steps to guide users on setting up the project.
+Re-generate /apps/api with a minimal NestJS project. Add a GET /healthz endpoint returning {'ok': true}. Include Jest configuration and two tests: one for compilation and another for the /healthz endpoint.

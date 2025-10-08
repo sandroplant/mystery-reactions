@@ -1,1 +1,1 @@
-This PR adds a README.md file in the docs directory with 5 bullet points to guide users on setting up the project.
+This PR sets up a minimal NestJS project in the /apps/api directory. It includes a GET /healthz endpoint that returns {"ok": true}. Jest configuration is added along with two tests: one for compilation and another for the /healthz endpoint.

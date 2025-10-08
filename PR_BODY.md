@@ -1,1 +1,1 @@
-This PR adds npm scripts to the /web/package.json for development, building, and starting the application. It also improves the /web/pages/index.js by adding a hero section and a waitlist form with basic styling.
+This PR sets up a minimal NestJS project in /apps/api. It includes a health check endpoint at GET /healthz and Jest configuration with unit and e2e tests.

@@ -1,1 +1,1 @@
-Add npm scripts to /web/package.json for dev, build, and start. Improve /web/pages/index.js to display a hero section and a waitlist form with basic styling.
+Re-generate /apps/api with a minimal NestJS project. Add a health check endpoint and Jest configuration with tests.

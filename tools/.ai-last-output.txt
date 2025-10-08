@@ -1,22 +1,18 @@
 ```json
 {
-  "plan": "Create a minimal FastAPI app in /apps/media with a single endpoint GET /presign. Add a Dockerfile.ffmpeg for a worker with ffmpeg installed. Include a pytest smoke test for the FastAPI app.",
+  "plan": "Add npm scripts to /web/package.json for dev, build, and start. Improve /web/pages/index.js to display a hero section and a waitlist form with basic styling.",
   "files": [
     {
-      "path": "apps/media/app/main.py",
-      "content": "from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get('/presign')\ndef read_presign():\n    return {\"ok\": true, \"url\": \"demo\"}\n"
+      "path": "web/package.json",
+      "content": "{\n  \"name\": \"web\",\n  \"version\": \"1.0.0\",\n  \"scripts\": {\n    \"dev\": \"next dev\",\n    \"build\": \"next build\",\n    \"start\": \"next start\"\n  },\n  \"dependencies\": {\n    \"next\": \"latest\",\n    \"react\": \"latest\",\n    \"react-dom\": \"latest\"\n  }\n}"
     },
     {
-      "path": "apps/media/Dockerfile.ffmpeg",
-      "content": "FROM ubuntu:20.04\n\nRUN apt-get update && \\\n    apt-get install -y ffmpeg && \\\n    rm -rf /var/lib/apt/lists/*\n"
-    },
-    {
-      "path": "apps/media/tests/test_main.py",
-      "content": "from fastapi.testclient import TestClient\nfrom app.main import app\n\ndef test_read_presign():\n    client = TestClient(app)\n    response = client.get('/presign')\n    assert response.status_code == 200\n    assert response.json() == {\"ok\": true, \"url\": \"demo\"}\n"
+      "path": "web/pages/index.js",
+      "content": "import React from 'react';\n\nconst IndexPage = () => {\n  return (\n    <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px', textAlign: 'center' }}>\n      <section style={{ marginBottom: '40px' }}>\n        <h1 style={{ fontSize: '3em', margin: '0.5em 0' }}>Welcome to Our Service</h1>\n        <p style={{ fontSize: '1.2em', color: '#666' }}>Join our waitlist to stay updated!</p>\n      </section>\n      <section>\n        <form style={{ display: 'inline-block', textAlign: 'left' }}>\n          <div style={{ marginBottom: '10px' }}>\n            <label htmlFor=\"email\" style={{ display: 'block', marginBottom: '5px' }}>Email:</label>\n            <input type=\"email\" id=\"email\" name=\"email\" style={{ padding: '10px', width: '100%', boxSizing: 'border-box' }} required />\n          </div>\n          <button type=\"submit\" style={{ padding: '10px 20px', backgroundColor: '#0070f3', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>\n            Join Waitlist\n          </button>\n        </form>\n      </section>\n    </div>\n  );\n};\n\nexport default IndexPage;\n"
     }
   ],
-  "commit_message": "Add FastAPI app with /presign endpoint and Dockerfile.ffmpeg",
-  "pr_title": "Add FastAPI app and Dockerfile.ffmpeg",
-  "pr_body": "This PR introduces a minimal FastAPI application in the /apps/media directory with a single endpoint, GET /presign, returning a JSON response. Additionally, it adds a Dockerfile.ffmpeg to set up a worker with ffmpeg installed. A pytest smoke test is included to verify the FastAPI endpoint."
+  "commit_message": "Add npm scripts and improve index.js with hero and waitlist form",
+  "pr_title": "Add npm scripts and hero section with waitlist form",
+  "pr_body": "This PR adds npm scripts to the /web/package.json for development, building, and starting the application. It also improves the /web/pages/index.js by adding a hero section and a waitlist form with basic styling."
 }
 ```

@@ -1,1 +1,1 @@
-Initialize NestJS project with health check endpoint
+Add FastAPI app and Dockerfile.ffmpeg

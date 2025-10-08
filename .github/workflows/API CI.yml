@@ -1,7 +1,13 @@
 name: API CI
-on: pull_request
+on:
+  pull_request:
+    paths: ["apps/api/**", ".github/workflows/api-ci.yml"]
 jobs:
-  ok:
+  test:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "api ok"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: cd apps/api && npm ci
+      - run: cd apps/api && npm test -- --ci --reporters=default --reporters=jest-junit

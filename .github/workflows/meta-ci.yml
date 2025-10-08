@@ -1,12 +1,7 @@
 name: Meta CI
-
 on:
   pull_request:
-    # run when workflows, docs, or root markdown files change
-    paths:
-      - ".github/**"
-      - "docs/**"
-      - "*.md"
+    types: [opened, synchronize, reopened, ready_for_review]
 
 jobs:
   ok:

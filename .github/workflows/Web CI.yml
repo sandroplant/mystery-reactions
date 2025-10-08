@@ -1,7 +1,13 @@
 name: Web CI
-on: pull_request
+on:
+  pull_request:
+    paths: ["web/**", ".github/workflows/web-ci.yml"]
 jobs:
-  ok:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "web ok"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: cd web && npm ci
+      - run: cd web && npm run build

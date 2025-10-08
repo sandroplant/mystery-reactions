@@ -1,1 +1,1 @@
-Initialize NestJS project in /apps/api
+Add FastAPI app and Dockerfile.ffmpeg for media service

@@ -1,1 +1,1 @@
-Create a minimal NestJS project in /apps/api with a health check endpoint. Add Jest configuration and tests for compilation and the /healthz endpoint.
+Create a minimal FastAPI app in /apps/media with a single endpoint GET /presign. Add a Dockerfile.ffmpeg as a worker stub and a pytest smoke test to ensure the app runs correctly.

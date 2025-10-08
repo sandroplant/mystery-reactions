@@ -1,1 +1,1 @@
-This PR sets up a minimal NestJS project in the /apps/api directory. It includes a health check endpoint at GET /healthz that returns {"ok": true}. Jest is configured for testing, with tests for both compilation and the /healthz endpoint.
+This PR introduces a minimal FastAPI application under /apps/media with a single endpoint GET /presign. It also includes a Dockerfile.ffmpeg as a worker stub and a pytest smoke test to verify the endpoint.

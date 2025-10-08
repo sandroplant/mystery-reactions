@@ -1,1 +1,1 @@
-Re-generate /apps/api with a minimal NestJS project. Add a GET /healthz endpoint returning {'ok': true}. Include Jest configuration and two tests: one for compilation and another for the /healthz endpoint.
+Create a minimal FastAPI app in /apps/media with a single endpoint GET /presign. Add a Dockerfile.ffmpeg for a worker with ffmpeg installed. Include a pytest smoke test for the FastAPI app.

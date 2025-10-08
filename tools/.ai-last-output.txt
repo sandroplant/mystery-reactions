@@ -1,42 +1,22 @@
 ```json
 {
-  "plan": "Re-generate /apps/api with a minimal NestJS project. Add a GET /healthz endpoint returning {'ok': true}. Include Jest configuration and two tests: one for compilation and another for the /healthz endpoint.",
+  "plan": "Create a minimal FastAPI app in /apps/media with a single endpoint GET /presign. Add a Dockerfile.ffmpeg for a worker with ffmpeg installed. Include a pytest smoke test for the FastAPI app.",
   "files": [
     {
-      "path": "apps/api/package.json",
-      "content": "{\n  \"name\": \"api\",\n  \"version\": \"0.0.1\",\n  \"description\": \"A minimal NestJS project\",\n  \"main\": \"dist/main.js\",\n  \"scripts\": {\n    \"start\": \"nest start\",\n    \"build\": \"nest build\",\n    \"test\": \"jest\"\n  },\n  \"dependencies\": {\n    \"@nestjs/common\": \"^9.0.0\",\n    \"@nestjs/core\": \"^9.0.0\",\n    \"@nestjs/platform-express\": \"^9.0.0\",\n    \"reflect-metadata\": \"^0.1.13\",\n    \"rxjs\": \"^7.0.0\"\n  },\n  \"devDependencies\": {\n    \"@nestjs/cli\": \"^9.0.0\",\n    \"@nestjs/schematics\": \"^9.0.0\",\n    \"@nestjs/testing\": \"^9.0.0\",\n    \"@types/jest\": \"^29.0.0\",\n    \"@types/node\": \"^18.0.0\",\n    \"jest\": \"^29.0.0\",\n    \"ts-jest\": \"^29.0.0\",\n    \"ts-loader\": \"^9.0.0\",\n    \"typescript\": \"^4.0.0\"\n  }\n}\n"
+      "path": "apps/media/app/main.py",
+      "content": "from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get('/presign')\ndef read_presign():\n    return {\"ok\": true, \"url\": \"demo\"}\n"
     },
     {
-      "path": "apps/api/tsconfig.json",
-      "content": "{\n  \"compilerOptions\": {\n    \"module\": \"commonjs\",\n    \"target\": \"es6\",\n    \"strict\": true,\n    \"esModuleInterop\": true,\n    \"skipLibCheck\": true,\n    \"outDir\": \"./dist\",\n    \"baseUrl\": \"./\",\n    \"incremental\": true\n  },\n  \"include\": [\"src/**/*\"],\n  \"exclude\": [\"node_modules\", \"dist\"]\n}\n"
+      "path": "apps/media/Dockerfile.ffmpeg",
+      "content": "FROM ubuntu:20.04\n\nRUN apt-get update && \\\n    apt-get install -y ffmpeg && \\\n    rm -rf /var/lib/apt/lists/*\n"
     },
     {
-      "path": "apps/api/src/main.ts",
-      "content": "import { NestFactory } from '@nestjs/core';\nimport { AppModule } from './app.module';\n\nasync function bootstrap() {\n  const app = await NestFactory.create(AppModule);\n  await app.listen(3000);\n}\nbootstrap();\n"
-    },
-    {
-      "path": "apps/api/src/app.module.ts",
-      "content": "import { Module } from '@nestjs/common';\nimport { AppController } from './app.controller';\n\n@Module({\n  imports: [],\n  controllers: [AppController],\n  providers: [],\n})\nexport class AppModule {}\n"
-    },
-    {
-      "path": "apps/api/src/app.controller.ts",
-      "content": "import { Controller, Get } from '@nestjs/common';\n\n@Controller()\nexport class AppController {\n  @Get('healthz')\n  getHealth(): { ok: boolean } {\n    return { ok: true };\n  }\n}\n"
-    },
-    {
-      "path": "apps/api/jest.config.js",
-      "content": "module.exports = {\n  moduleFileExtensions: ['js', 'json', 'ts'],\n  rootDir: 'src',\n  testRegex: '.*\\.spec\\.ts$',\n  transform: {\n    '^.+\\.(t|j)s$': 'ts-jest',\n  },\n  collectCoverageFrom: ['**/*.(t|j)s'],\n  coverageDirectory: '../coverage',\n  testEnvironment: 'node',\n};\n"
-    },
-    {
-      "path": "apps/api/src/app.controller.spec.ts",
-      "content": "import { Test, TestingModule } from '@nestjs/testing';\nimport { AppController } from './app.controller';\n\ndescribe('AppController', () => {\n  let appController: AppController;\n\n  beforeEach(async () => {\n    const app: TestingModule = await Test.createTestingModule({\n      controllers: [AppController],\n    }).compile();\n\n    appController = app.get<AppController>(AppController);\n  });\n\n  describe('getHealth', () => {\n    it('should return { ok: true }', () => {\n      expect(appController.getHealth()).toEqual({ ok: true });\n    });\n  });\n});\n"
-    },
-    {
-      "path": "apps/api/src/app.e2e-spec.ts",
-      "content": "import * as request from 'supertest';\nimport { Test } from '@nestjs/testing';\nimport { INestApplication } from '@nestjs/common';\nimport { AppModule } from './app.module';\n\ndescribe('AppController (e2e)', () => {\n  let app: INestApplication;\n\n  beforeAll(async () => {\n    const moduleFixture = await Test.createTestingModule({\n      imports: [AppModule],\n    }).compile();\n\n    app = moduleFixture.createNestApplication();\n    await app.init();\n  });\n\n  it('/GET healthz', () => {\n    return request(app.getHttpServer())\n      .get('/healthz')\n      .expect(200)\n      .expect({ ok: true });\n  });\n\n  afterAll(async () => {\n    await app.close();\n  });\n});\n"
+      "path": "apps/media/tests/test_main.py",
+      "content": "from fastapi.testclient import TestClient\nfrom app.main import app\n\ndef test_read_presign():\n    client = TestClient(app)\n    response = client.get('/presign')\n    assert response.status_code == 200\n    assert response.json() == {\"ok\": true, \"url\": \"demo\"}\n"
     }
   ],
-  "commit_message": "Initialize NestJS project in /apps/api with health check endpoint",
-  "pr_title": "Initialize NestJS project with health check endpoint",
-  "pr_body": "This PR sets up a minimal NestJS project in the /apps/api directory. It includes a GET /healthz endpoint that returns {\"ok\": true}. Jest configuration is added along with two tests: one for compilation and another for the /healthz endpoint."
+  "commit_message": "Add FastAPI app with /presign endpoint and Dockerfile.ffmpeg",
+  "pr_title": "Add FastAPI app and Dockerfile.ffmpeg",
+  "pr_body": "This PR introduces a minimal FastAPI application in the /apps/media directory with a single endpoint, GET /presign, returning a JSON response. Additionally, it adds a Dockerfile.ffmpeg to set up a worker with ffmpeg installed. A pytest smoke test is included to verify the FastAPI endpoint."
 }
 ```

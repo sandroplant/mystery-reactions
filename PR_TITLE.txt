@@ -1,1 +1,1 @@
-Add npm scripts and hero section with waitlist form
+Initialize NestJS API with health check

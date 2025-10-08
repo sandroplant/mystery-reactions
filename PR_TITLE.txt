@@ -1,1 +1,1 @@
-Initialize NestJS API with health check
+Initialize NestJS project in /apps/api

@@ -1,0 +1,15 @@
+name: Meta CI
+
+on:
+  pull_request:
+    # run when workflows, docs, or root markdown files change
+    paths:
+      - ".github/**"
+      - "docs/**"
+      - "*.md"
+
+jobs:
+  ok:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Meta CI check passed ✅"

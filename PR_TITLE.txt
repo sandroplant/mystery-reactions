@@ -1,1 +1,1 @@
-Add setup instructions to docs
+Initialize NestJS project with health check endpoint

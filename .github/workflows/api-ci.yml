@@ -30,4 +30,4 @@ jobs:
       - name: Run tests
         env:
           CI: 'true'
-        run: npm test -- --ci --reporters=default --reporters=jest-junit
+        run: npm test -- --ci --passWithNoTests

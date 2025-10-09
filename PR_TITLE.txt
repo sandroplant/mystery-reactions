@@ -1,1 +1,1 @@
-Add FastAPI app and Dockerfile.ffmpeg for media service
+Add GET /v1/ping endpoint

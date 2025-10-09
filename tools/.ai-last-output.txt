@@ -1,22 +1,26 @@
 ```json
 {
-  "plan": "Create a minimal FastAPI app in /apps/media with a single endpoint GET /presign. Add a Dockerfile.ffmpeg as a worker stub and a pytest smoke test to ensure the app runs correctly.",
+  "plan": "Add a new PingController to expose GET /v1/ping endpoint returning { ok: true }. Wire it in app.module.ts and add a Jest test. Update README.md with a curl example.",
   "files": [
     {
-      "path": "apps/media/app/main.py",
-      "content": "from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get('/presign')\nasync def presign():\n    return {\"ok\": true, \"url\": \"demo\"}\n"
+      "path": "apps/api/src/app.controller.ts",
+      "content": "import { Controller, Get } from '@nestjs/common';\n\n@Controller('v1')\nexport class PingController {\n  @Get('ping')\n  getPing() {\n    return { ok: true };\n  }\n}\n"
     },
     {
-      "path": "apps/media/Dockerfile.ffmpeg",
-      "content": "FROM python:3.9-slim\n\nWORKDIR /app\n\nCOPY app /app\n\nRUN pip install fastapi uvicorn\n\nCMD [\"uvicorn\", \"main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\"]\n"
+      "path": "apps/api/src/app.module.ts",
+      "content": "import { Module } from '@nestjs/common';\nimport { PingController } from './app.controller';\n\n@Module({\n  imports: [],\n  controllers: [PingController],\n  providers: [],\n})\nexport class AppModule {}\n"
     },
     {
-      "path": "apps/media/tests/test_smoke.py",
-      "content": "from fastapi.testclient import TestClient\nfrom app.main import app\n\ndef test_presign():\n    client = TestClient(app)\n    response = client.get('/presign')\n    assert response.status_code == 200\n    assert response.json() == {\"ok\": true, \"url\": \"demo\"}\n"
+      "path": "apps/api/test/app.controller.spec.ts",
+      "content": "import { Test, TestingModule } from '@nestjs/testing';\nimport { PingController } from '../src/app.controller';\n\ndescribe('PingController', () => {\n  let pingController: PingController;\n\n  beforeEach(async () => {\n    const app: TestingModule = await Test.createTestingModule({\n      controllers: [PingController],\n    }).compile();\n\n    pingController = app.get<PingController>(PingController);\n  });\n\n  describe('getPing', () => {\n    it('should return { ok: true }', () => {\n      expect(pingController.getPing()).toEqual({ ok: true });\n    });\n  });\n});\n"
+    },
+    {
+      "path": "apps/api/README.md",
+      "content": "# API\n\n## Endpoints\n\n### GET /v1/ping\n\nReturns a simple JSON object to confirm the service is running.\n\n#### Example\n\n```bash\ncurl -X GET http://localhost:3000/v1/ping\n```\n\nExpected response:\n\n```json\n{\n  \"ok\": true\n}\n```\n"
     }
   ],
-  "commit_message": "Add FastAPI app with /presign endpoint and Dockerfile.ffmpeg",
-  "pr_title": "Add FastAPI app and Dockerfile.ffmpeg for media service",
-  "pr_body": "This PR introduces a minimal FastAPI application under /apps/media with a single endpoint GET /presign. It also includes a Dockerfile.ffmpeg as a worker stub and a pytest smoke test to verify the endpoint."
+  "commit_message": "Add GET /v1/ping endpoint to NestJS API",
+  "pr_title": "Add GET /v1/ping endpoint",
+  "pr_body": "This PR adds a new endpoint GET /v1/ping to the NestJS API. It includes a controller, wiring in app.module.ts, a Jest test, and documentation in README.md. No breaking changes introduced."
 }
 ```

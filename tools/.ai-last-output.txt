@@ -1,22 +1,24 @@
-```json
 {
-  "plan": "Create a minimal FastAPI app in /apps/media with a single endpoint GET /presign. Add a Dockerfile.ffmpeg as a worker stub and a pytest smoke test to ensure the app runs correctly.",
+  "plan": "Add a new GET /v1/ping endpoint to the API that returns a simple 'pong' response. Implement a Jest test to verify the endpoint's functionality. Update the README with an example of how to use the endpoint.",
   "files": [
     {
-      "path": "apps/media/app/main.py",
-      "content": "from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get('/presign')\nasync def presign():\n    return {\"ok\": true, \"url\": \"demo\"}\n"
+      "path": "apps/api/index.js",
+      "content": "const express = require('express');\nconst app = express();\n\napp.get('/v1/ping', (req, res) => {\n  res.json({ message: 'pong' });\n});\n\nconst PORT = process.env.PORT || 3000;\napp.listen(PORT, () => {\n  console.log(`Server is running on port ${PORT}`);\n});\n\nmodule.exports = app;"
     },
     {
-      "path": "apps/media/Dockerfile.ffmpeg",
-      "content": "FROM python:3.9-slim\n\nWORKDIR /app\n\nCOPY app /app\n\nRUN pip install fastapi uvicorn\n\nCMD [\"uvicorn\", \"main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\"]\n"
+      "path": "apps/api/__tests__/ping.test.js",
+      "content": "const request = require('supertest');\nconst app = require('../index');\n\ndescribe('GET /v1/ping', () => {\n  it('should return pong', async () => {\n    const res = await request(app).get('/v1/ping');\n    expect(res.statusCode).toEqual(200);\n    expect(res.body).toHaveProperty('message', 'pong');\n  });\n});"
     },
     {
-      "path": "apps/media/tests/test_smoke.py",
-      "content": "from fastapi.testclient import TestClient\nfrom app.main import app\n\ndef test_presign():\n    client = TestClient(app)\n    response = client.get('/presign')\n    assert response.status_code == 200\n    assert response.json() == {\"ok\": true, \"url\": \"demo\"}\n"
+      "path": "README.md",
+      "content": "# API Documentation\n\n## Endpoints\n\n### GET /v1/ping\n\nReturns a simple 'pong' message.\n\n#### Example\n\n```bash\ncurl http://localhost:3000/v1/ping\n```\n\n#### Response\n\n```json\n{\n  \"message\": \"pong\"\n}\n```"
+    },
+    {
+      "path": "package.json",
+      "content": "{\n  \"name\": \"api\",\n  \"version\": \"1.0.0\",\n  \"main\": \"index.js\",\n  \"scripts\": {\n    \"start\": \"node apps/api/index.js\",\n    \"test\": \"jest\"\n  },\n  \"dependencies\": {\n    \"express\": \"^4.17.1\"\n  },\n  \"devDependencies\": {\n    \"jest\": \"^29.0.0\",\n    \"supertest\": \"^6.1.3\"\n  }\n}"
     }
   ],
-  "commit_message": "Add FastAPI app with /presign endpoint and Dockerfile.ffmpeg",
-  "pr_title": "Add FastAPI app and Dockerfile.ffmpeg for media service",
-  "pr_body": "This PR introduces a minimal FastAPI application under /apps/media with a single endpoint GET /presign. It also includes a Dockerfile.ffmpeg as a worker stub and a pytest smoke test to verify the endpoint."
+  "commit_message": "Add GET /v1/ping endpoint with Jest test and README example",
+  "pr_title": "Add GET /v1/ping endpoint",
+  "pr_body": "This PR adds a new GET /v1/ping endpoint to the API. It includes a Jest test to verify the endpoint's functionality and updates the README with an example of how to use the endpoint."
 }
-```

@@ -1,0 +1,7 @@
+Goal: Add GET /v1/ping to the NestJS API (apps/api):
+- Create a controller exposing GET /v1/ping returning { ok: true }.
+- Wire it in app.module.ts.
+- Add a Jest test for the controller.
+- Update apps/api/README.md with curl example.
+Constraints: No breaking changes; keep existing tests green.
+Acceptance: `npm test` in apps/api passes; PR opens via AI Coder.

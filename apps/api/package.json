@@ -5,7 +5,8 @@
   "scripts": {
     "start": "nest start",
     "build": "nest build",
-    "test": "jest"
+    "test": "jest",
+    "start:dev": "nest start --watch"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",

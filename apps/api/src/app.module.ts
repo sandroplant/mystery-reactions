@@ -1,9 +1,14 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
+import { Module, Controller, Get } from '@nestjs/common';
+
+@Controller()
+class AppController {
+  @Get('healthz')
+  getHealth() {
+    return { ok: true };
+  }
+}
 
 @Module({
-  imports: [],
   controllers: [AppController],
-  providers: [],
 })
 export class AppModule {}

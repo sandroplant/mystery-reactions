@@ -1,1 +1,1 @@
-Create a minimal FastAPI app in /apps/media with a single endpoint GET /presign. Add a Dockerfile.ffmpeg as a worker stub and a pytest smoke test to ensure the app runs correctly.
+Add a new PingController to expose GET /v1/ping endpoint returning { ok: true }. Wire it in app.module.ts and add a Jest test. Update README.md with a curl example.

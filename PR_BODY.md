@@ -1,1 +1,1 @@
-This PR introduces a minimal FastAPI application under /apps/media with a single endpoint GET /presign. It also includes a Dockerfile.ffmpeg as a worker stub and a pytest smoke test to verify the endpoint.
+This PR adds a new endpoint GET /v1/ping to the NestJS API. It includes a controller, wiring in app.module.ts, a Jest test, and documentation in README.md. No breaking changes introduced.

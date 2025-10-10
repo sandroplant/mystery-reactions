@@ -2,7 +2,10 @@ name: Meta CI
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
-
+permissions: { contents: read }
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   ok:
     runs-on: ubuntu-latest
